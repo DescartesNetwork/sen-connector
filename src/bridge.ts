@@ -21,7 +21,7 @@ export class Messenger {
       'message',
       ({ data: { type, payload }, origin }) => {
         if (type === CODE) {
-          console.log(this.name, origin)
+          console.log(this.name, origin, payload)
           return callback(payload)
         }
       },
