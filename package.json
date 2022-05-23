@@ -1,8 +1,8 @@
 {
   "name": "@sentre/connector",
   "description": "🤝 Sentre Wallet Connector for Embeded DApps",
-  "version": "0.0.2",
-  "main": "dist/app/index.js",
+  "version": "0.0.3",
+  "main": "dist/index.js",
   "homepage": "connector.sentre.io",
   "devDependencies": {
     "@types/node": "^17.0.35",
