@@ -1,0 +1,8 @@
+export enum EVENTS {
+  CONNECT,
+  GET_ADDRESS,
+  SIGN_TRANSACTION,
+  SIGN_ALL_TRANSACTIONS,
+}
+
+export const TIMEOUT = 3000
