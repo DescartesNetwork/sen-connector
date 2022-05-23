@@ -1,7 +1,7 @@
 {
   "name": "@sentre/connector",
-  "description": "",
-  "version": "0.0.1",
+  "description": "🤝 Sentre Wallet Connector for Embeded DApps",
+  "version": "0.0.2",
   "main": "dist/app/index.js",
   "homepage": "connector.sentre.io",
   "devDependencies": {
@@ -15,7 +15,7 @@
     "start": "nodemon src/index.ts",
     "build": "npm run clean && tsc",
     "clean": "rm -rf ./dist",
-    "predeploy": "typedoc --excludePrivate --excludeProtected ./app/index.ts",
+    "predeploy": "typedoc --excludePrivate --excludeProtected ./src/index.ts",
     "deploy": "echo connector.sentre.io >> ./docs/CNAME && gh-pages -d docs"
   },
   "repository": {
