@@ -55,8 +55,10 @@ export class WalletProvider {
   }
 
   onSignTransaction = async (transaction: Transaction) => {
-    const { instructions } = transaction
+    const { instructions, feePayer, recentBlockhash } = transaction
     const tx = new Transaction().add(...instructions)
+    tx.feePayer = feePayer
+    tx.recentBlockhash = recentBlockhash
     const signedTx = await this.wallet.signTransaction(tx)
     const serializedTx = signedTx.serialize()
     return this.emit({ event: EVENTS.SIGN_TRANSACTION, data: serializedTx })
