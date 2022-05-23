@@ -6,7 +6,7 @@ import { EVENTS } from './constants'
 export type Wallet = {
   getAddress: () => Promise<string>
   signTransaction: (tx: Transaction) => Promise<Transaction>
-  signAllTransactions: (txs: Transaction[]) => Promise<Transaction[]>
+  // signAllTransactions: (txs: Transaction[]) => Promise<Transaction[]>
 }
 
 export class Gateway {
