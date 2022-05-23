@@ -15,7 +15,7 @@ export class Messenger {
   }
 
   emit = (data: any) => {
-    return this.partnerWindow.postMessage({ type: CODE, payload: data })
+    return this.partnerWindow.postMessage({ type: CODE, payload: data }, '*')
   }
 
   listen = (callback: (data: any) => void) => {

@@ -1,5 +1,7 @@
 import { Messenger } from './bridge'
 
+const TIMEOUT = 1500
+
 export enum EVENTS {
   CONNECT,
 }
@@ -31,7 +33,7 @@ export class WalletConnector {
   isConnected = async () => {
     return new Promise((resolve, reject) => {
       try {
-        const id = setTimeout(() => resolve(false), 3000)
+        const id = setTimeout(() => resolve(false), TIMEOUT)
         this.messenger.listen(({ events, data }) => {
           if (events === EVENTS.CONNECT) {
             clearTimeout(id)
