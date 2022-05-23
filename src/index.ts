@@ -18,7 +18,7 @@ export enum EVENTS {
 export class WalletProvider {
   private iframeID: string
   private messenger: Messenger
-  private wallet: any
+  private wallet: Wallet
 
   constructor(iframeID: string, wallet: Wallet) {
     this.iframeID = iframeID
@@ -54,9 +54,12 @@ export class WalletProvider {
     return this.emit({ event: EVENTS.GET_ADDRESS, data: address })
   }
 
-  onSignTransaction = async (tx: Transaction) => {
+  onSignTransaction = async (transaction: Transaction) => {
+    const { instructions } = transaction
+    const tx = new Transaction().add(...instructions)
     const signedTx = await this.wallet.signTransaction(tx)
-    return this.emit({ event: EVENTS.SIGN_TRANSACTION, data: signedTx })
+    const serializedTx = signedTx.serialize()
+    return this.emit({ event: EVENTS.SIGN_TRANSACTION, data: serializedTx })
   }
 }
 
@@ -111,11 +114,12 @@ export class WalletConnector {
   }
 
   signTransaction = async (transaction: Transaction): Promise<Transaction> => {
-    const tx = await this.interact<Transaction>({
+    const serializedTx = await this.interact<Buffer>({
       event: EVENTS.SIGN_TRANSACTION,
       data: transaction,
       timeout: TIMEOUT * 20,
     })
+    const tx = Transaction.from(serializedTx)
     return tx
   }
 }
