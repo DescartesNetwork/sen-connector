@@ -27,7 +27,7 @@ export class WalletProvider {
 
     this.messenger.listen(async ({ event }) => {
       if (event === EVENTS.CONNECT) return this.onConnect()
-      if (event === EVENTS.GET_ADDRESS) return this.wallet.onGetAddress()
+      if (event === EVENTS.GET_ADDRESS) return this.onGetAddress()
     })
   }
 
