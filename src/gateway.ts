@@ -10,19 +10,18 @@ export type Wallet = {
 }
 
 export class Gateway {
-  private iframeID: string
   private messenger: Messenger
   private wallet: Wallet
 
-  constructor(iframeID: string, wallet: Wallet) {
-    this.iframeID = iframeID
-    this.messenger = new Messenger({ name: 'server' })
+  constructor(wallet: Wallet, verbose: boolean = false) {
+    this.messenger = new Messenger({ name: 'gateway', verbose })
     this.wallet = wallet
 
-    this.messenger.listen(async ({ event, data }) => {
-      if (event === EVENTS.CONNECT) return this.onConnect()
-      if (event === EVENTS.GET_ADDRESS) return this.onGetAddress()
-      if (event === EVENTS.SIGN_TRANSACTION) return this.onSignTransaction(data)
+    this.messenger.listen(async ({ event, id, uid, data }) => {
+      if (event === EVENTS.CONNECT) return this.onConnect(id, uid)
+      if (event === EVENTS.GET_ADDRESS) return this.onGetAddress(id, uid)
+      if (event === EVENTS.SIGN_TRANSACTION)
+        return this.onSignTransaction(uid, id, data)
       // if (event === EVENTS.SIGN_ALL_TRANSACTIONS)
       //   return this.onSignAllTransactions(data)
     })
@@ -30,29 +29,33 @@ export class Gateway {
 
   terminate = () => this.messenger.killAll()
 
-  emit = (data: any) => {
-    const child = document.getElementById(this.iframeID)
+  emit = (id: string, data: any) => {
+    const child = document.getElementById(id)
     if (!child || child.tagName !== 'IFRAME')
-      throw new Error(`Cannot find iframe with id ${this.iframeID}`)
+      throw new Error(`Cannot find iframe with id ${id}`)
     const wd = (child as HTMLIFrameElement)?.contentWindow
     if (!wd) throw new Error('Cannot access to iframe window')
     return this.messenger.emit(wd, data)
   }
 
-  onConnect = () => {
-    return this.emit({ event: EVENTS.CONNECT, data: true })
+  onConnect = (id: string, uid: number) => {
+    return this.emit(id, { event: EVENTS.CONNECT, uid, data: true })
   }
 
-  onGetAddress = async () => {
+  onGetAddress = async (id: string, uid: number) => {
     const address = await this.wallet.getAddress()
-    return this.emit({ event: EVENTS.GET_ADDRESS, data: address })
+    return this.emit(id, { event: EVENTS.GET_ADDRESS, uid, data: address })
   }
 
-  onSignTransaction = async (buf: Buffer) => {
+  onSignTransaction = async (id: string, uid: number, buf: Buffer) => {
     const tx = Transaction.from(buf)
     const signedTx = await this.wallet.signTransaction(tx)
     const serializedTx = signedTx.serialize()
-    return this.emit({ event: EVENTS.SIGN_TRANSACTION, data: serializedTx })
+    return this.emit(id, {
+      event: EVENTS.SIGN_TRANSACTION,
+      uid,
+      data: serializedTx,
+    })
   }
 
   // onSignAllTransactions = async (bufs: Buffer[]) => {

@@ -3,10 +3,15 @@ import { Transaction } from '@solana/web3.js'
 import { Messenger } from './bridge'
 import { EVENTS, TIMEOUT } from './constants'
 
+export const genUID = () => Math.round(Math.random() * 10 ** 9)
+
 export class WalletConnector {
   private messenger: Messenger
-  constructor() {
-    this.messenger = new Messenger({ name: 'client' })
+  private id: string
+
+  constructor(appId: string, verbose: boolean = false) {
+    this.id = appId + '-iframe'
+    this.messenger = new Messenger({ name: this.id, verbose })
   }
 
   private interact = async <T>({
@@ -21,15 +26,19 @@ export class WalletConnector {
     return new Promise((resolve, reject) => {
       try {
         if (!window.parent) throw new Error('Cannot access to parent window')
-        const id = setTimeout(() => reject('Request timeout'), timeout)
-        const kill = this.messenger.listen(({ event: catchedEvent, data }) => {
-          if (event === catchedEvent) {
-            clearTimeout(id)
-            kill()
-            return resolve(data)
-          }
-        })
-        return this.messenger.emit(window.parent, { event, data })
+        const timeoutId = setTimeout(() => reject('Request timeout'), timeout)
+        const id = this.id
+        const uid = genUID()
+        const kill = this.messenger.listen(
+          ({ event: catchedEvent, uid: catchedUID, data }) => {
+            if (event === catchedEvent && uid === catchedUID) {
+              clearTimeout(timeoutId)
+              kill()
+              return resolve(data)
+            }
+          },
+        )
+        return this.messenger.emit(window.parent, { event, id, uid, data })
       } catch (er: any) {
         return reject(er.message)
       }
