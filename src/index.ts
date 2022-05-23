@@ -116,7 +116,10 @@ export class WalletConnector {
   signTransaction = async (transaction: Transaction): Promise<Transaction> => {
     const serializedTx = await this.interact<Buffer>({
       event: EVENTS.SIGN_TRANSACTION,
-      data: transaction.serializeMessage(),
+      data: transaction.serialize({
+        requireAllSignatures: false,
+        verifySignatures: false,
+      }),
       timeout: TIMEOUT * 20,
     })
     const tx = Transaction.from(serializedTx)
