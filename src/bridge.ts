@@ -6,16 +6,14 @@ export type MessageProps = {
 const CODE = 'sentre'
 
 export class Messenger {
-  private partnerWindow: Window
   private name?: string
 
-  constructor(partnerWindow: Window, name = 'unknown') {
-    this.partnerWindow = partnerWindow
+  constructor(name = 'unknown') {
     this.name = name
   }
 
-  emit = (data: any) => {
-    return this.partnerWindow.postMessage({ type: CODE, payload: data }, '*')
+  emit = (win: Window, data: any) => {
+    return win.postMessage({ type: CODE, payload: data }, '*')
   }
 
   listen = (callback: (data: any) => void) => {
