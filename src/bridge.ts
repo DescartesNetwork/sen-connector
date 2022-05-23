@@ -29,7 +29,7 @@ export class Messenger {
   listen = (callback: (data: any) => void): (() => void) => {
     const handler = ({ data: { type, payload }, origin }: MessageEvent) => {
       if (type === CODE) {
-        if (this.verbose) console.log('Bridge:', this.name, origin, payload)
+        if (this.verbose) console.log(this.name, origin, payload)
         return callback(payload)
       }
     }
