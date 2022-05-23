@@ -49,8 +49,8 @@ export class WalletConnector {
     return new Promise((resolve, reject) => {
       try {
         const id = setTimeout(() => resolve(false), TIMEOUT)
-        this.messenger.listen(({ events, data }) => {
-          if (events === EVENTS.CONNECT) {
+        this.messenger.listen(({ event, data }) => {
+          if (event === EVENTS.CONNECT) {
             clearTimeout(id)
             return resolve(data)
           }
