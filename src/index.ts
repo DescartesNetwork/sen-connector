@@ -54,11 +54,9 @@ export class WalletProvider {
     return this.emit({ event: EVENTS.GET_ADDRESS, data: address })
   }
 
-  onSignTransaction = async (transaction: Transaction) => {
-    const { instructions, feePayer, recentBlockhash } = transaction
-    const tx = new Transaction().add(...instructions)
-    tx.feePayer = feePayer
-    tx.recentBlockhash = recentBlockhash
+  onSignTransaction = async (buf: Buffer) => {
+    const tx = Transaction.from(buf)
+    console.log('tx', tx)
     const signedTx = await this.wallet.signTransaction(tx)
     const serializedTx = signedTx.serialize()
     return this.emit({ event: EVENTS.SIGN_TRANSACTION, data: serializedTx })
@@ -118,7 +116,7 @@ export class WalletConnector {
   signTransaction = async (transaction: Transaction): Promise<Transaction> => {
     const serializedTx = await this.interact<Buffer>({
       event: EVENTS.SIGN_TRANSACTION,
-      data: transaction,
+      data: transaction.serializeMessage(),
       timeout: TIMEOUT * 20,
     })
     const tx = Transaction.from(serializedTx)
