@@ -3,7 +3,7 @@ import { Transaction } from '@solana/web3.js'
 import { Messenger } from './bridge'
 import { EVENTS, TIMEOUT } from './constants'
 
-export const genUID = () => Math.round(Math.random() * 10 ** 9)
+export const UID = () => Math.round(Math.random() * 10 ** 9)
 
 export class WalletConnector {
   private messenger: Messenger
@@ -28,7 +28,7 @@ export class WalletConnector {
         if (!window.parent) throw new Error('Cannot access to parent window')
         const timeoutId = setTimeout(() => reject('Request timeout'), timeout)
         const id = this.id
-        const uid = genUID()
+        const uid = UID()
         const kill = this.messenger.listen(
           ({ event: catchedEvent, uid: catchedUID, data }) => {
             if (event === catchedEvent && uid === catchedUID) {
