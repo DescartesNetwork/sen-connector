@@ -50,6 +50,7 @@ export class WalletProvider {
 
   onGetAddress = async () => {
     const address = await this.wallet.getAddress()
+    console.log(address)
     return this.emit({ event: EVENTS.GET_ADDRESS, data: address })
   }
 }
