@@ -1,0 +1,34 @@
+{
+  "name": "@sentre/connector",
+  "description": "",
+  "version": "0.0.1",
+  "main": "dist/app/index.js",
+  "homepage": "connector.sentre.io",
+  "devDependencies": {
+    "@types/node": "^17.0.35",
+    "gh-pages": "^4.0.0",
+    "ts-node": "^10.8.0",
+    "typedoc": "^0.22.15",
+    "typescript": "^4.6.4"
+  },
+  "scripts": {
+    "start": "nodemon src/index.ts",
+    "build": "npm run clean && tsc",
+    "clean": "rm -rf ./dist",
+    "predeploy": "typedoc --excludePrivate --excludeProtected ./app/index.ts",
+    "deploy": "echo connector.sentre.io >> ./docs/CNAME && gh-pages -d docs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DescartesNetwork/sen-connector.git"
+  },
+  "keywords": [
+    "senhub",
+    "sentre"
+  ],
+  "author": "Tu Phan <tuphan@descartes.network>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/DescartesNetwork/sen-connector/issues"
+  }
+}
