@@ -23,8 +23,8 @@ export class Gateway {
       if (event === EVENTS.CONNECT) return this.onConnect()
       if (event === EVENTS.GET_ADDRESS) return this.onGetAddress()
       if (event === EVENTS.SIGN_TRANSACTION) return this.onSignTransaction(data)
-      if (event === EVENTS.SIGN_ALL_TRANSACTIONS)
-        return this.onSignAllTransactions(data)
+      // if (event === EVENTS.SIGN_ALL_TRANSACTIONS)
+      //   return this.onSignAllTransactions(data)
     })
   }
 
@@ -53,13 +53,13 @@ export class Gateway {
     return this.emit({ event: EVENTS.SIGN_TRANSACTION, data: serializedTx })
   }
 
-  onSignAllTransactions = async (bufs: Buffer[]) => {
-    const txs = bufs.map((buf) => Transaction.from(buf))
-    const signedTxs = await this.wallet.signAllTransactions(txs)
-    const serializedTxs = signedTxs.map((signedTx) => signedTx.serialize())
-    return this.emit({
-      event: EVENTS.SIGN_ALL_TRANSACTIONS,
-      data: serializedTxs,
-    })
-  }
+  // onSignAllTransactions = async (bufs: Buffer[]) => {
+  //   const txs = bufs.map((buf) => Transaction.from(buf))
+  //   const signedTxs = await this.wallet.signAllTransactions(txs)
+  //   const serializedTxs = signedTxs.map((signedTx) => signedTx.serialize())
+  //   return this.emit({
+  //     event: EVENTS.SIGN_ALL_TRANSACTIONS,
+  //     data: serializedTxs,
+  //   })
+  // }
 }

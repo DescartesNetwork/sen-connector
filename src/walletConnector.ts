@@ -63,22 +63,22 @@ export class WalletConnector {
     return tx
   }
 
-  signAllTransactions = async (
-    transactions: Transaction[],
-  ): Promise<Transaction[]> => {
-    const serializedTxs = await this.interact<Buffer[]>({
-      event: EVENTS.SIGN_ALL_TRANSACTIONS,
-      data: transactions.map((transaction) =>
-        transaction.serialize({
-          requireAllSignatures: false,
-          verifySignatures: false,
-        }),
-      ),
-      timeout: TIMEOUT * 20,
-    })
-    const txs = serializedTxs.map((serializedTx) =>
-      Transaction.from(serializedTx),
-    )
-    return txs
-  }
+  // signAllTransactions = async (
+  //   transactions: Transaction[],
+  // ): Promise<Transaction[]> => {
+  //   const serializedTxs = await this.interact<Buffer[]>({
+  //     event: EVENTS.SIGN_ALL_TRANSACTIONS,
+  //     data: transactions.map((transaction) =>
+  //       transaction.serialize({
+  //         requireAllSignatures: false,
+  //         verifySignatures: false,
+  //       }),
+  //     ),
+  //     timeout: TIMEOUT * 20,
+  //   })
+  //   const txs = serializedTxs.map((serializedTx) =>
+  //     Transaction.from(serializedTx),
+  //   )
+  //   return txs
+  // }
 }
