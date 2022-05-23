@@ -27,10 +27,7 @@ export class WalletProvider {
 
     this.messenger.listen(async ({ event }) => {
       if (event === EVENTS.CONNECT) return this.onConnect()
-
-      if (event === EVENTS.GET_ADDRESS) {
-        const address = await this.wallet.get
-      }
+      if (event === EVENTS.GET_ADDRESS) return this.wallet.onGetAddress()
     })
   }
 
@@ -86,7 +83,7 @@ export class WalletConnector {
             return resolve(data)
           }
         })
-        this.messenger.emit(this.win, { event, data })
+        return this.messenger.emit(this.win, { event, data })
       } catch (er: any) {
         return reject(er.message)
       }
