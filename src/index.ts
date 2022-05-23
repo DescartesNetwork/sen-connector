@@ -1,22 +1,36 @@
+import { Transaction } from '@solana/web3.js'
 import { Messenger } from './bridge'
 
-const TIMEOUT = 1500
+const TIMEOUT = 5000
+
+export type Wallet = {
+  getAddress: () => Promise<string>
+  signTransaction: (tx: Transaction) => Promise<Transaction>
+  signAllTransaction?: (txs: Transaction[]) => Promise<Transaction[]>
+}
 
 export enum EVENTS {
   CONNECT,
+  GET_ADDRESS,
+  SIGN_TRANSACTION,
 }
 
 export class WalletProvider {
   private iframeID: string
   private messenger: Messenger
+  private wallet: any
 
-  constructor(iframeID: string) {
+  constructor(iframeID: string, wallet: Wallet) {
     this.iframeID = iframeID
     this.messenger = new Messenger('server')
+    this.wallet = wallet
 
-    this.messenger.listen(({ event }) => {
-      if (event === EVENTS.CONNECT)
-        return this.emit({ event: EVENTS.CONNECT, data: true })
+    this.messenger.listen(async ({ event }) => {
+      if (event === EVENTS.CONNECT) return this.onConnect()
+
+      if (event === EVENTS.GET_ADDRESS) {
+        const address = await this.wallet.get
+      }
     })
   }
 
@@ -32,6 +46,15 @@ export class WalletProvider {
   emit = (data: any) => {
     return this.messenger.emit(this.win, data)
   }
+
+  onConnect = () => {
+    return this.emit({ event: EVENTS.CONNECT, data: true })
+  }
+
+  onGetAddress = async () => {
+    const address = await this.wallet.getAddress()
+    return this.emit({ event: EVENTS.GET_ADDRESS, data: address })
+  }
 }
 
 export class WalletConnector {
@@ -45,20 +68,37 @@ export class WalletConnector {
     return window.parent
   }
 
-  isConnected = async () => {
+  private interact = async <T>(eventName: EVENTS, data: any = {}) => {
     return new Promise((resolve, reject) => {
       try {
-        const id = setTimeout(() => resolve(false), TIMEOUT)
+        const id = setTimeout(() => reject('Request timeout'), TIMEOUT)
         this.messenger.listen(({ event, data }) => {
-          if (event === EVENTS.CONNECT) {
+          if (event === eventName) {
             clearTimeout(id)
             return resolve(data)
           }
         })
-        this.messenger.emit(this.win, { event: EVENTS.CONNECT })
+        this.messenger.emit(this.win, { event: eventName, data })
       } catch (er: any) {
         return reject(er.message)
       }
-    })
+    }) as Promise<T>
+  }
+
+  isConnected = async (): Promise<boolean> => {
+    return await this.interact<boolean>(EVENTS.CONNECT)
+  }
+
+  getAddress = async (): Promise<string> => {
+    return await this.interact<string>(EVENTS.GET_ADDRESS)
+  }
+
+  signTransaction = async (transaction: Transaction): Promise<Transaction> => {
+    const { signature, publicKey } = await this.interact(
+      EVENTS.SIGN_TRANSACTION,
+      transaction,
+    )
+    transaction.addSignature(publicKey, signature)
+    return transaction
   }
 }
