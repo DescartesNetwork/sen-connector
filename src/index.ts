@@ -6,6 +6,7 @@ const TIMEOUT = 3000
 export type Wallet = {
   getAddress: () => Promise<string>
   signTransaction: (tx: Transaction) => Promise<Transaction>
+  signAllTransactions: (txs: Transaction[]) => Promise<Transaction[]>
 }
 
 export enum EVENTS {
@@ -29,6 +30,8 @@ export class WalletProvider {
       if (event === EVENTS.CONNECT) return this.onConnect()
       if (event === EVENTS.GET_ADDRESS) return this.onGetAddress()
       if (event === EVENTS.SIGN_TRANSACTION) return this.onSignTransaction(data)
+      if (event === EVENTS.SIGN_ALL_TRANSACTIONS)
+        return this.onSignAllTransactions(data)
     })
   }
 
@@ -60,6 +63,16 @@ export class WalletProvider {
     const signedTx = await this.wallet.signTransaction(tx)
     const serializedTx = signedTx.serialize()
     return this.emit({ event: EVENTS.SIGN_TRANSACTION, data: serializedTx })
+  }
+
+  onSignAllTransactions = async (bufs: Buffer[]) => {
+    const txs = bufs.map((buf) => Transaction.from(buf))
+    const signedTxs = await this.wallet.signAllTransactions(txs)
+    const serializedTxs = signedTxs.map((signedTx) => signedTx.serialize())
+    return this.emit({
+      event: EVENTS.SIGN_ALL_TRANSACTIONS,
+      data: serializedTxs,
+    })
   }
 }
 
@@ -124,5 +137,24 @@ export class WalletConnector {
     })
     const tx = Transaction.from(serializedTx)
     return tx
+  }
+
+  signAllTransactions = async (
+    transactions: Transaction[],
+  ): Promise<Transaction[]> => {
+    const serializedTxs = await this.interact<Buffer[]>({
+      event: EVENTS.SIGN_ALL_TRANSACTIONS,
+      data: transactions.map((transaction) =>
+        transaction.serialize({
+          requireAllSignatures: false,
+          verifySignatures: false,
+        }),
+      ),
+      timeout: TIMEOUT * 20,
+    })
+    const txs = serializedTxs.map((serializedTx) =>
+      Transaction.from(serializedTx),
+    )
+    return txs
   }
 }
