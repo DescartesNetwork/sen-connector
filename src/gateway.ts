@@ -17,11 +17,11 @@ export class Gateway {
     this.messenger = new Messenger({ name: 'gateway', verbose })
     this.wallet = wallet
 
-    this.messenger.listen(async ({ event, id, uid, data }) => {
+    this.messenger.listen(async ({ id, uid, event, data }) => {
       if (event === EVENTS.CONNECT) return this.onConnect(id, uid)
       if (event === EVENTS.GET_ADDRESS) return this.onGetAddress(id, uid)
       if (event === EVENTS.SIGN_TRANSACTION)
-        return this.onSignTransaction(uid, id, data)
+        return this.onSignTransaction(id, uid, data)
       // if (event === EVENTS.SIGN_ALL_TRANSACTIONS)
       //   return this.onSignAllTransactions(data)
     })
@@ -39,12 +39,12 @@ export class Gateway {
   }
 
   onConnect = (id: string, uid: number) => {
-    return this.emit(id, { event: EVENTS.CONNECT, uid, data: true })
+    return this.emit(id, { uid, event: EVENTS.CONNECT, data: true })
   }
 
   onGetAddress = async (id: string, uid: number) => {
     const address = await this.wallet.getAddress()
-    return this.emit(id, { event: EVENTS.GET_ADDRESS, uid, data: address })
+    return this.emit(id, { uid, event: EVENTS.GET_ADDRESS, data: address })
   }
 
   onSignTransaction = async (id: string, uid: number, buf: Buffer) => {
@@ -52,8 +52,8 @@ export class Gateway {
     const signedTx = await this.wallet.signTransaction(tx)
     const serializedTx = signedTx.serialize()
     return this.emit(id, {
-      event: EVENTS.SIGN_TRANSACTION,
       uid,
+      event: EVENTS.SIGN_TRANSACTION,
       data: serializedTx,
     })
   }
