@@ -1,7 +1,7 @@
 import { Transaction } from '@solana/web3.js'
 import { Messenger } from './bridge'
 
-const TIMEOUT = 5000
+const TIMEOUT = 3000
 
 export type Wallet = {
   getAddress: () => Promise<string>
@@ -68,17 +68,25 @@ export class WalletConnector {
     return window.parent
   }
 
-  private interact = async <T>(eventName: EVENTS, data: any = {}) => {
+  private interact = async <T>({
+    event,
+    data = {},
+    timeout = TIMEOUT,
+  }: {
+    event: EVENTS
+    data?: any
+    timeout?: number
+  }) => {
     return new Promise((resolve, reject) => {
       try {
-        const id = setTimeout(() => reject('Request timeout'), TIMEOUT)
-        this.messenger.listen(({ event, data }) => {
-          if (event === eventName) {
+        const id = setTimeout(() => reject('Request timeout'), timeout)
+        this.messenger.listen(({ event: catchedEvent, data }) => {
+          if (event === catchedEvent) {
             clearTimeout(id)
             return resolve(data)
           }
         })
-        this.messenger.emit(this.win, { event: eventName, data })
+        this.messenger.emit(this.win, { event, data })
       } catch (er: any) {
         return reject(er.message)
       }
@@ -86,18 +94,25 @@ export class WalletConnector {
   }
 
   isConnected = async (): Promise<boolean> => {
-    return await this.interact<boolean>(EVENTS.CONNECT)
+    return await this.interact<boolean>({
+      event: EVENTS.CONNECT,
+      timeout: TIMEOUT,
+    })
   }
 
   getAddress = async (): Promise<string> => {
-    return await this.interact<string>(EVENTS.GET_ADDRESS)
+    return await this.interact<string>({
+      event: EVENTS.GET_ADDRESS,
+      timeout: TIMEOUT * 2,
+    })
   }
 
   signTransaction = async (transaction: Transaction): Promise<Transaction> => {
-    const { signature, publicKey } = await this.interact(
-      EVENTS.SIGN_TRANSACTION,
-      transaction,
-    )
+    const { signature, publicKey } = await this.interact({
+      event: EVENTS.SIGN_TRANSACTION,
+      data: transaction,
+      timeout: TIMEOUT * 20,
+    })
     transaction.addSignature(publicKey, signature)
     return transaction
   }
