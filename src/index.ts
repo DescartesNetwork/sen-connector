@@ -6,13 +6,13 @@ const TIMEOUT = 3000
 export type Wallet = {
   getAddress: () => Promise<string>
   signTransaction: (tx: Transaction) => Promise<Transaction>
-  signAllTransaction?: (txs: Transaction[]) => Promise<Transaction[]>
 }
 
 export enum EVENTS {
   CONNECT,
   GET_ADDRESS,
   SIGN_TRANSACTION,
+  SIGN_ALL_TRANSACTIONS,
 }
 
 export class WalletProvider {
@@ -25,9 +25,10 @@ export class WalletProvider {
     this.messenger = new Messenger('server')
     this.wallet = wallet
 
-    this.messenger.listen(async ({ event }) => {
+    this.messenger.listen(async ({ event, data }) => {
       if (event === EVENTS.CONNECT) return this.onConnect()
       if (event === EVENTS.GET_ADDRESS) return this.onGetAddress()
+      if (event === EVENTS.SIGN_TRANSACTION) return this.onSignTransaction(data)
     })
   }
 
@@ -50,8 +51,12 @@ export class WalletProvider {
 
   onGetAddress = async () => {
     const address = await this.wallet.getAddress()
-    console.log(address)
     return this.emit({ event: EVENTS.GET_ADDRESS, data: address })
+  }
+
+  onSignTransaction = async (tx: Transaction) => {
+    const signedTx = await this.wallet.signTransaction(tx)
+    return this.emit({ event: EVENTS.SIGN_TRANSACTION, data: signedTx })
   }
 }
 
@@ -106,12 +111,11 @@ export class WalletConnector {
   }
 
   signTransaction = async (transaction: Transaction): Promise<Transaction> => {
-    const { signature, publicKey } = await this.interact({
+    const tx = await this.interact<Transaction>({
       event: EVENTS.SIGN_TRANSACTION,
       data: transaction,
       timeout: TIMEOUT * 20,
     })
-    transaction.addSignature(publicKey, signature)
-    return transaction
+    return tx
   }
 }
