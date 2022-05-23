@@ -28,6 +28,8 @@ export class Gateway {
     })
   }
 
+  terminate = () => this.messenger.killAll()
+
   emit = (data: any) => {
     const child = document.getElementById(this.iframeID)
     if (!child || child.tagName !== 'IFRAME')
