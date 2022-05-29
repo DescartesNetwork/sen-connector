@@ -2,6 +2,7 @@ import { Transaction } from '@solana/web3.js'
 
 import { Messenger } from './bridge'
 import { EVENTS, TIMEOUT } from './constants'
+import { SignedMessage } from './gateway'
 
 export const UID = () => Math.round(Math.random() * 10 ** 9)
 
@@ -90,4 +91,13 @@ export class WalletConnector {
   //   )
   //   return txs
   // }
+
+  signMessage = async (message: string): Promise<SignedMessage> => {
+    const signedMessage = await this.interact<SignedMessage>({
+      event: EVENTS.SIGN_MESSAGE,
+      data: message,
+      timeout: TIMEOUT * 20,
+    })
+    return signedMessage
+  }
 }

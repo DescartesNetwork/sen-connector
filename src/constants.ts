@@ -3,6 +3,7 @@ export enum EVENTS {
   GET_ADDRESS,
   SIGN_TRANSACTION,
   // SIGN_ALL_TRANSACTIONS,
+  SIGN_MESSAGE,
 }
 
 export const TIMEOUT = 3000

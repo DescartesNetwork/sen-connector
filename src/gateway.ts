@@ -3,10 +3,17 @@ import { Transaction } from '@solana/web3.js'
 import { Messenger } from './bridge'
 import { EVENTS } from './constants'
 
+export type SignedMessage = {
+  address: string // base58
+  signature: string // hex
+  message: string // raw
+}
+
 export type Wallet = {
   getAddress: () => Promise<string>
   signTransaction: (tx: Transaction) => Promise<Transaction>
   // signAllTransactions: (txs: Transaction[]) => Promise<Transaction[]>
+  signMessage: (msg: string) => Promise<SignedMessage>
 }
 
 export class Gateway {
@@ -24,6 +31,8 @@ export class Gateway {
         return this.onSignTransaction(id, uid, data)
       // if (event === EVENTS.SIGN_ALL_TRANSACTIONS)
       //   return this.onSignAllTransactions(data)
+      if (event === EVENTS.SIGN_MESSAGE)
+        return this.onSignMessage(id, uid, data)
     })
   }
 
@@ -67,4 +76,13 @@ export class Gateway {
   //     data: serializedTxs,
   //   })
   // }
+
+  onSignMessage = async (id: string, uid: number, msg: string) => {
+    const signedMsg = await this.wallet.signMessage(msg)
+    return this.emit(id, {
+      uid,
+      event: EVENTS.SIGN_MESSAGE,
+      data: signedMsg,
+    })
+  }
 }
