@@ -12,7 +12,7 @@ export type SignedMessage = {
 export type Wallet = {
   getAddress: () => Promise<string>
   signTransaction: (tx: Transaction) => Promise<Transaction>
-  // signAllTransactions: (txs: Transaction[]) => Promise<Transaction[]>
+  signAllTransactions: (txs: Transaction[]) => Promise<Transaction[]>
   signMessage: (msg: string) => Promise<SignedMessage>
 }
 
@@ -29,8 +29,8 @@ export class Gateway {
       if (event === EVENTS.GET_ADDRESS) return this.onGetAddress(id, uid)
       if (event === EVENTS.SIGN_TRANSACTION)
         return this.onSignTransaction(id, uid, data)
-      // if (event === EVENTS.SIGN_ALL_TRANSACTIONS)
-      //   return this.onSignAllTransactions(data)
+      if (event === EVENTS.SIGN_ALL_TRANSACTIONS)
+        return this.onSignAllTransactions(id, uid, data)
       if (event === EVENTS.SIGN_MESSAGE)
         return this.onSignMessage(id, uid, data)
     })
@@ -67,15 +67,16 @@ export class Gateway {
     })
   }
 
-  // onSignAllTransactions = async (bufs: Buffer[]) => {
-  //   const txs = bufs.map((buf) => Transaction.from(buf))
-  //   const signedTxs = await this.wallet.signAllTransactions(txs)
-  //   const serializedTxs = signedTxs.map((signedTx) => signedTx.serialize())
-  //   return this.emit({
-  //     event: EVENTS.SIGN_ALL_TRANSACTIONS,
-  //     data: serializedTxs,
-  //   })
-  // }
+  onSignAllTransactions = async (id: string, uid: number, bufs: Buffer[]) => {
+    const txs = bufs.map((buf) => Transaction.from(buf))
+    const signedTxs = await this.wallet.signAllTransactions(txs)
+    const serializedTxs = signedTxs.map((signedTx) => signedTx.serialize())
+    return this.emit(id, {
+      uid,
+      event: EVENTS.SIGN_ALL_TRANSACTIONS,
+      data: serializedTxs,
+    })
+  }
 
   onSignMessage = async (id: string, uid: number, msg: string) => {
     const signedMsg = await this.wallet.signMessage(msg)

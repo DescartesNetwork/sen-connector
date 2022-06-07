@@ -1,7 +1,7 @@
 import { Transaction } from '@solana/web3.js'
 
 import { Messenger } from './bridge'
-import { EVENTS, TIMEOUT } from './constants'
+import { EVENTS, ONE_SEC } from './constants'
 import { SignedMessage } from './gateway'
 
 export const UID = () => Math.round(Math.random() * 10 ** 9)
@@ -18,7 +18,7 @@ export class WalletConnector {
   private interact = async <T>({
     event,
     data = {},
-    timeout = TIMEOUT,
+    timeout = ONE_SEC * 3,
   }: {
     event: EVENTS
     data?: any
@@ -49,14 +49,14 @@ export class WalletConnector {
   isConnected = async (): Promise<boolean> => {
     return await this.interact<boolean>({
       event: EVENTS.CONNECT,
-      timeout: TIMEOUT,
+      timeout: ONE_SEC * 3,
     })
   }
 
   getAddress = async (): Promise<string> => {
     return await this.interact<string>({
       event: EVENTS.GET_ADDRESS,
-      timeout: TIMEOUT * 2,
+      timeout: ONE_SEC * 6,
     })
   }
 
@@ -67,36 +67,36 @@ export class WalletConnector {
         requireAllSignatures: false,
         verifySignatures: false,
       }),
-      timeout: TIMEOUT * 20,
+      timeout: ONE_SEC * 60,
     })
     const tx = Transaction.from(serializedTx)
     return tx
   }
 
-  // signAllTransactions = async (
-  //   transactions: Transaction[],
-  // ): Promise<Transaction[]> => {
-  //   const serializedTxs = await this.interact<Buffer[]>({
-  //     event: EVENTS.SIGN_ALL_TRANSACTIONS,
-  //     data: transactions.map((transaction) =>
-  //       transaction.serialize({
-  //         requireAllSignatures: false,
-  //         verifySignatures: false,
-  //       }),
-  //     ),
-  //     timeout: TIMEOUT * 20,
-  //   })
-  //   const txs = serializedTxs.map((serializedTx) =>
-  //     Transaction.from(serializedTx),
-  //   )
-  //   return txs
-  // }
+  signAllTransactions = async (
+    transactions: Transaction[],
+  ): Promise<Transaction[]> => {
+    const serializedTxs = await this.interact<Buffer[]>({
+      event: EVENTS.SIGN_ALL_TRANSACTIONS,
+      data: transactions.map((transaction) =>
+        transaction.serialize({
+          requireAllSignatures: false,
+          verifySignatures: false,
+        }),
+      ),
+      timeout: ONE_SEC * 120,
+    })
+    const txs = serializedTxs.map((serializedTx) =>
+      Transaction.from(serializedTx),
+    )
+    return txs
+  }
 
   signMessage = async (message: string): Promise<SignedMessage> => {
     const signedMessage = await this.interact<SignedMessage>({
       event: EVENTS.SIGN_MESSAGE,
       data: message,
-      timeout: TIMEOUT * 20,
+      timeout: ONE_SEC * 60,
     })
     return signedMessage
   }
