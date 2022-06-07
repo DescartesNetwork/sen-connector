@@ -18,6 +18,8 @@ if (isConnected) {
   const address = await wallet.getAddress()
   // Sign a transaction
   const signedTransaction = await wallet.signTransaction(transaction)
+  // Sign multiple transactions
+  const signedTransactions = await wallet.signAllTransactions(transactions)
   // Sign a message
   const { signature, address, message } = await wallet.signMessage(
     'the message needs to be signed',
