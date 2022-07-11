@@ -13,8 +13,6 @@ import {
 import { PublicKey, Transaction } from '@solana/web3.js'
 import { WalletConnector } from './walletConnector'
 
-const MOTHER_PLATFORM = 'https://hub.sentre.io'
-
 export interface SentreWalletAdapterConfig {
   appId: string
 }
@@ -23,7 +21,7 @@ export const SentreWalletName = 'Sentre' as WalletName<'Sentre'>
 
 export class SentreWalletAdapter extends BaseMessageSignerWalletAdapter {
   name = SentreWalletName
-  url = MOTHER_PLATFORM
+  url = 'https://hub.sentre.io'
   icon =
     'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTg2IiBoZWlnaHQ9IjIyOCIgdmlld0JveD0iMCAwIDE4NiAyMjgiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxwYXRoIGQ9Ik05Mi42ODA5IDIyNy44ODJMMzAuODY2NyAxNjUuOTYzQzExLjEwMzEgMTQ2LjE2NSAwIDExOS4zMTUgMCA5MS4zMTY3QzAgNjMuMzE5NSAxMS4xMDMxIDM2LjQ2ODggMzAuODY2NyAxNi42NzE1TDQ3LjQ4MDkgMC4wMjkyMzU4TDEwOS4zMyA2MS45ODMzQzEyOS4wNzggODEuNzgzOCAxNDAuMTY4IDEwOC42MjkgMTQwLjE2MiAxMzYuNjE5QzE0MC4xNTUgMTY0LjYwOCAxMjkuMDUyIDE5MS40NDggMTA5LjI5NSAyMTEuMjM5TDkyLjY4MDkgMjI3Ljg4MloiIGZpbGw9InVybCgjcGFpbnQwX2xpbmVhcl8zMTdfNCkiLz4KPHBhdGggZD0iTTc2LjA3MzkgNjEuOTg4OUwxMzcuOTU4IDBMMTU0LjU3MiAxNi42NDIzQzE2NC4zNjggMjYuNDQ2MSAxNzIuMTM5IDM4LjA4NzggMTc3LjQ0MiA1MC45MDJDMTgyLjc0NCA2My43MTYyIDE4NS40NzQgNzcuNDUxMyAxODUuNDc0IDkxLjMyMjdDMTg1LjQ3NCAxMDUuMTk0IDE4Mi43NDQgMTE4LjkyOSAxNzcuNDQyIDEzMS43NDNDMTcyLjEzOSAxNDQuNTU3IDE2NC4zNjggMTU2LjE5OSAxNTQuNTcyIDE2Ni4wMDNMOTIuNzIyNSAyMjcuOTU3TDc2LjA3MzkgMjExLjI4QzU2LjMxMDIgMTkxLjQ4MyA0NS4yMDcgMTY0LjYzMiA0NS4yMDcgMTM2LjYzNUM0NS4yMDcgMTA4LjYzNyA1Ni4zMTAyIDgxLjc4NjEgNzYuMDczOSA2MS45ODg5WiIgZmlsbD0idXJsKCNwYWludDFfbGluZWFyXzMxN180KSIvPgo8ZGVmcz4KPGxpbmVhckdyYWRpZW50IGlkPSJwYWludDBfbGluZWFyXzMxN180IiB4MT0iMTQwLjIyIiB5MT0iMTEzLjk3MyIgeDI9Ii0wLjAyMjgyMDMiIHkyPSIxMTMuOTczIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+CjxzdG9wIHN0b3AtY29sb3I9IiNGOTU3NUUiLz4KPHN0b3Agb2Zmc2V0PSIwLjI3IiBzdG9wLWNvbG9yPSIjRjg1NTVCIi8+CjxzdG9wIG9mZnNldD0iMC40OSIgc3RvcC1jb2xvcj0iI0Y0NEY1MSIvPgo8c3RvcCBvZmZzZXQ9IjAuNjgiIHN0b3AtY29sb3I9IiNFRTQ1NDAiLz4KPHN0b3Agb2Zmc2V0PSIwLjg3IiBzdG9wLWNvbG9yPSIjRTYzNzI4Ii8+CjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI0RFMkExMyIvPgo8L2xpbmVhckdyYWRpZW50Pgo8bGluZWFyR3JhZGllbnQgaWQ9InBhaW50MV9saW5lYXJfMzE3XzQiIHgxPSItNDIwNjA4IiB5MT0iMzUyNjM0IiB4Mj0iLTQyNDM3MSIgeTI9IjM1MTcxMiIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPgo8c3RvcCBzdG9wLWNvbG9yPSIjRjk1NzVFIi8+CjxzdG9wIG9mZnNldD0iMC4yNyIgc3RvcC1jb2xvcj0iI0Y4NTU1QiIvPgo8c3RvcCBvZmZzZXQ9IjAuNDkiIHN0b3AtY29sb3I9IiNGNDRGNTEiLz4KPHN0b3Agb2Zmc2V0PSIwLjY4IiBzdG9wLWNvbG9yPSIjRUU0NTQwIi8+CjxzdG9wIG9mZnNldD0iMC44NyIgc3RvcC1jb2xvcj0iI0U2MzcyOCIvPgo8c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNERTJBMTMiLz4KPC9saW5lYXJHcmFkaWVudD4KPC9kZWZzPgo8L3N2Zz4K'
 
@@ -45,7 +43,7 @@ export class SentreWalletAdapter extends BaseMessageSignerWalletAdapter {
 
     if (this._readyState !== WalletReadyState.Unsupported) {
       scopePollingDetectionStrategy(() => {
-        if (window.parent.location.origin.includes(MOTHER_PLATFORM)) {
+        if (window != window.top) {
           this._readyState = WalletReadyState.Installed
           this.emit('readyStateChange', this._readyState)
           return true
