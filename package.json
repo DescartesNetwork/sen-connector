@@ -12,8 +12,8 @@
     "start": "nodemon src/index.ts",
     "build": "yarn clean && tsc",
     "clean": "rm -rf ./dist",
-    "predeploy": "typedoc --excludePrivate --excludeProtected ./src/index.ts",
-    "deploy": "echo connector.sentre.io >> ./docs/CNAME && gh-pages -d docs"
+    "predocs": "typedoc --excludePrivate --excludeProtected ./src/index.ts",
+    "docs": "echo connector.sentre.io >> ./docs/CNAME && gh-pages -d docs"
   },
   "repository": {
     "type": "git",
