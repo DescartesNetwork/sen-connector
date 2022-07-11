@@ -1,19 +1,16 @@
 {
   "name": "@sentre/connector",
   "description": "🤝 Sentre Wallet Connector for Embeded DApps",
-  "version": "0.0.30",
+  "version": "0.0.31",
   "main": "dist/index.js",
   "homepage": "connector.sentre.io",
-  "devDependencies": {
-    "@types/node": "^17.0.35",
-    "gh-pages": "^4.0.0",
-    "ts-node": "^10.8.0",
-    "typedoc": "^0.22.15",
-    "typescript": "^4.6.4"
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   },
   "scripts": {
     "start": "nodemon src/index.ts",
-    "build": "npm run clean && tsc",
+    "build": "yarn clean && tsc",
     "clean": "rm -rf ./dist",
     "predeploy": "typedoc --excludePrivate --excludeProtected ./src/index.ts",
     "deploy": "echo connector.sentre.io >> ./docs/CNAME && gh-pages -d docs"
@@ -31,7 +28,21 @@
   "bugs": {
     "url": "https://github.com/DescartesNetwork/sen-connector/issues"
   },
+  "engines": {
+    "node": ">=16 <=18"
+  },
+  "resolutions": {
+    "@solana/web3.js": "1.44.3"
+  },
   "dependencies": {
-    "@solana/web3.js": "^1.43.1"
+    "@solana/wallet-adapter-base": "^0.9.7",
+    "@solana/web3.js": "^1.44.3"
+  },
+  "devDependencies": {
+    "@types/node": "^17.0.35",
+    "gh-pages": "^4.0.0",
+    "ts-node": "^10.8.0",
+    "typedoc": "^0.22.15",
+    "typescript": "^4.6.4"
   }
 }

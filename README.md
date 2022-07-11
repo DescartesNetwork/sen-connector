@@ -8,6 +8,22 @@ npm i @sentre/connector
 
 ## To use
 
+### With [@solana/wallet-adapter](https://solana-labs.github.io/wallet-adapter/)
+
+```ts
+import { SentreWalletAdapter } from '@sentre/connector'
+
+// The add SentreWalletAdapter with your App ID to @solana/wallet-adapter
+// https://solana-labs.github.io/wallet-adapter/
+
+const network = WalletAdapterNetwork.Devnet
+const appId = 'my-app-id'
+
+const wallets = useMemo(() => [new SentreWalletAdapter({ appId })], [network])
+```
+
+### Manual integration
+
 ```ts
 import { WalletConnector } from '@sentre/connector'
 
