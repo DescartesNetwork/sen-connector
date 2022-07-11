@@ -1,4 +1,4 @@
-# Senhub Connector
+# 🤝 Senhub Connector
 
 ## Installation
 
@@ -13,7 +13,7 @@ npm i @sentre/connector
 ```ts
 import { SentreWalletAdapter } from '@sentre/connector'
 
-// The add SentreWalletAdapter with your App ID to @solana/wallet-adapter
+// Add SentreWalletAdapter with your provided app id to @solana/wallet-adapter
 // https://solana-labs.github.io/wallet-adapter/
 
 const network = WalletAdapterNetwork.Devnet

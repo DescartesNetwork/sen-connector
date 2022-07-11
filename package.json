@@ -1,7 +1,7 @@
 {
   "name": "@sentre/connector",
   "description": "🤝 Sentre Wallet Connector for Embeded DApps",
-  "version": "0.0.31",
+  "version": "0.0.32",
   "main": "dist/index.js",
   "homepage": "connector.sentre.io",
   "publishConfig": {
@@ -9,7 +9,6 @@
     "registry": "https://registry.npmjs.org/"
   },
   "scripts": {
-    "start": "nodemon src/index.ts",
     "build": "yarn clean && tsc",
     "clean": "rm -rf ./dist",
     "predocs": "typedoc --excludePrivate --excludeProtected ./src/index.ts",
