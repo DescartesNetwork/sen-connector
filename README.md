@@ -1,9 +1,25 @@
 # 🤝 Senhub Connector
 
+[![https://img.shields.io/npm/v/@sentre/connector](https://img.shields.io/npm/v/@sentre/connector)](https://www.npmjs.com/package/@sentre/connector)
+[![https://img.shields.io/npm/dw/@sentre/connector](https://img.shields.io/npm/dm/@sentre/connector)](https://www.npmjs.com/package/@sentre/connector)
+[![https://img.shields.io/bundlephobia/min/@sentre/connector](https://img.shields.io/bundlephobia/min/@sentre/connector)](https://www.npmjs.com/package/@sentre/connector)
+[![https://img.shields.io/github/issues-raw/descartesnetwork/sen-connector](https://img.shields.io/github/issues-raw/descartesnetwork/sen-connector)](https://github.com/DescartesNetwork/sen-connector)
+[![https://img.shields.io/github/license/descartesnetwork/sen-connector](https://img.shields.io/github/license/descartesnetwork/sen-connector)](https://github.com/DescartesNetwork/sen-connector)
+
+[![https://img.shields.io/twitter/follow/SentreProtocol?style=social](https://img.shields.io/twitter/follow/SentreProtocol?style=social)](https://twitter.com/SentreProtocol)
+
+By the integration, your DApps can fully communicate with Senhub platform.
+
 ## Installation
 
 ```bash
 npm i @sentre/connector
+```
+
+or,
+
+```bash
+yarn add @sentre/connector
 ```
 
 ## To use
