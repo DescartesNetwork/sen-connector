@@ -1,7 +1,7 @@
 {
   "name": "@sentre/connector",
   "description": "🤝 Sentre Wallet Connector for Embeded DApps",
-  "version": "0.0.35",
+  "version": "0.0.36",
   "main": "dist/index.js",
   "homepage": "connector.sentre.io",
   "publishConfig": {
@@ -11,7 +11,7 @@
   "scripts": {
     "build": "yarn clean && tsc",
     "clean": "rm -rf ./dist",
-    "predocs": "typedoc --excludePrivate --excludeProtected ./src/index.ts",
+    "predocs": "typedoc --excludePrivate --excludeProtected --includeVersion ./src/index.ts",
     "docs": "echo connector.sentre.io >> ./docs/CNAME && gh-pages -d docs"
   },
   "repository": {
