@@ -1,13 +1,13 @@
 {
   "compilerOptions": {
     "typeRoots": ["./node_modules/@types"],
+    "outDir": "./dist",
     "lib": ["es2015", "DOM"],
+    "module": "commonjs",
+    "target": "es5",
     "allowJs": true,
     "skipLibCheck": true,
-    "module": "commonjs",
-    "target": "es6",
     "esModuleInterop": true,
-    "outDir": "./dist",
     "strict": true,
     "resolveJsonModule": true,
     "declaration": true

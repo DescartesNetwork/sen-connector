@@ -65,3 +65,7 @@ if (isConnected) {
   )
 }
 ```
+
+## Testing
+
+👉 [Sen Connector Tester](https://hub.sentre.io/app/connector_tester?autoInstall=true)
