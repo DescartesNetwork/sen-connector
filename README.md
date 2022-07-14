@@ -68,4 +68,4 @@ if (isConnected) {
 
 ## Testing
 
-👉 [Sen Connector Tester](https://hub.sentre.io/app/connector_tester?autoInstall=true)
+👉 Test your DApps locally by [Sen Connector Tester](https://hub.sentre.io/app/connector_tester?autoInstall=true).
