@@ -42,10 +42,11 @@ export class SentreWalletAdapter extends BaseMessageSignerWalletAdapter {
     this._appId = config.appId
 
     if (this._readyState !== WalletReadyState.Unsupported) {
-      const walletName = localStorage.getItem('walletName')
-      if (walletName !== SentreWalletName) localStorage.removeItem('walletName')
+      const isIframe = window !== window.top
+      if (isIframe && localStorage.getItem('walletName') !== SentreWalletName)
+        this.disconnect()
       scopePollingDetectionStrategy(() => {
-        if (window != window.top) {
+        if (isIframe) {
           this._readyState = WalletReadyState.Installed
           this.emit('readyStateChange', this._readyState)
           return true
