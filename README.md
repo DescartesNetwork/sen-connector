@@ -66,6 +66,10 @@ if (isConnected) {
 }
 ```
 
-## Testing
+### Testing
 
-👉 Test your DApps locally by [Sen Connector Tester](https://hub.sentre.io/app/connector_tester?autoInstall=true).
+👉 Test your DApps locally by [Senhub Connector Tester](https://hub.sentre.io/app/connector_tester?autoInstall=true).
+
+[![action](button.png)](https://hub.sentre.io/app/connector_tester?autoInstall=true)
+
+## OAuth
