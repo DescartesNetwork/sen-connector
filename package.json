@@ -1,7 +1,7 @@
 {
   "name": "@sentre/connector",
-  "description": "🤝 Sentre Wallet Connector for Embeded DApps",
-  "version": "0.0.48",
+  "description": "🤝 Senhub Connector to power your DApps with Senhub Platform",
+  "version": "0.0.49",
   "main": "dist/index.js",
   "homepage": "connector.sentre.io",
   "publishConfig": {
