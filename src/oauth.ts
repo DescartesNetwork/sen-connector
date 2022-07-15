@@ -17,10 +17,11 @@ export class JST {
 
   /**
    * Json Solana Token
-   * @param id Unique ID
-   * @param issuer We recommend to use your domain .e.g, hub.sentre.io
-   * @param createdDate JST created date (unix timestampt in seconds)
-   * @param ttl Time to Live in seconds
+   * @param opts
+   * @param opts.id Unique ID
+   * @param opts.issuer We recommend to use your domain .e.g, hub.sentre.io
+   * @param opts.createdDate JST created date (unix timestampt in seconds)
+   * @param opts.ttl Time to Live in seconds
    */
   constructor({
     id = JST.rand(),
@@ -41,6 +42,10 @@ export class JST {
     this.issuer = issuer
     this.createdDate = createdDate
     this.ttl = ttl
+  }
+
+  private concat = () => {
+    return `${this.id}/${this.issuer}/${this.createdDate}/${this.ttl}`
   }
 
   /**
@@ -64,21 +69,26 @@ export class JST {
 
   /**
    * Validate JST expiration
-   * @returns true/false
+   * @returns `true` or `false`
    */
   isExpired = () => {
     return JST.now() > this.createdDate + this.ttl
   }
 
-  private concat = () => {
-    return `${this.id}/${this.issuer}/${this.createdDate}/${this.ttl}`
-  }
-
+  /**
+   * Convert JST to buffer
+   * @returns Buffer
+   */
   toBuffer = () => {
     const str = this.concat()
     return Buffer.from(str, 'utf8')
   }
 
+  /**
+   * Infer JST from buffer
+   * @param buf JST buffer
+   * @returns JST
+   */
   static fromBuffer = (buf: Buffer) => {
     const str = buf.toString()
     const [id, issuer, createdDate, ttl] = str.split('/')
@@ -104,9 +114,9 @@ export class OAuth {
 
   /**
    * Sign the JST
-   * @param jst
-   * @param signer
-   * @returns
+   * @param jst JST instance
+   * @param signer The signer
+   * @returns Bearer
    */
   sign = async (jst: JST, signer: Signer) => {
     const publicKey = await signer.getPublicKey()
@@ -117,6 +127,11 @@ export class OAuth {
     return `${address}/${encodedSig}/${code}`
   }
 
+  /**
+   * Verify the bearer, which is returned by `sign`
+   * @param bearer The bearer. To use, add to request header `Authorization: Bearer bearer`
+   * @returns `true` or `false`
+   */
   verify = async (bearer: string) => {
     const [address, encodedSig, code] = bearer.split('/')
     const publicKey = new PublicKey(address)

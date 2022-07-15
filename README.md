@@ -73,3 +73,26 @@ if (isConnected) {
 [![action](button.png)](https://hub.sentre.io/app/connector_tester?autoInstall=true)
 
 ## OAuth
+
+This module is heavily inspired by [JWT](https://www.npmjs.com/package/jsonwebtoken). However, JST (Json Solana Token) adopted Solana wallet adapter standard as the main cryptography mechanism.
+
+### Usage
+
+```ts
+import { OAuth } from '@sentre/connector'
+
+const oauth = new OAuth()
+const jst = oauth.issue({ issuer: 'hub.sentre.io' }) // Default is one month of expiration
+
+// On client side
+// Sign the jst to get bearer
+const bearer = await oauth.sign(jst, signer)
+
+// On server side
+// Verify the bearer
+const ok = await oauth.verify(bearer)
+```
+
+### Examples
+
+👉 [Sign with keypair](./tests/oauth.test.ts)

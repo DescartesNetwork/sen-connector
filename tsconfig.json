@@ -3,7 +3,6 @@
     "types": ["mocha", "chai"],
     "typeRoots": ["./node_modules/@types"],
     "outDir": "./dist",
-    "lib": ["es2015", "DOM"],
     "module": "commonjs",
     "target": "es6",
     "moduleResolution": "node",
