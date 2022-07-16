@@ -70,7 +70,7 @@ if (isConnected) {
 
 👉 Test your DApps locally by [Senhub Connector Tester](https://hub.sentre.io/app/connector_tester?autoInstall=true).
 
-[![action](button.png)](https://hub.sentre.io/app/connector_tester?autoInstall=true)
+[![action](https://github.com/DescartesNetwork/sen-connector/blob/master/button.png?raw=true)](https://hub.sentre.io/app/connector_tester?autoInstall=true)
 
 ## OAuth
 
@@ -95,4 +95,4 @@ const ok = await oauth.verify(bearer)
 
 ### Examples
 
-👉 [Sign with keypair](./tests/oauth.test.ts)
+👉 [Authenticate with Keypair](https://github.com/DescartesNetwork/sen-connector/blob/master/tests/oauth.test.ts)

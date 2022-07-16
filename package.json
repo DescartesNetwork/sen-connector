@@ -1,7 +1,7 @@
 {
   "name": "@sentre/connector",
   "description": "🤝 Senhub Connector to power your DApps with Senhub Platform",
-  "version": "0.0.50",
+  "version": "0.0.51",
   "main": "dist/index.js",
   "homepage": "connector.sentre.io",
   "publishConfig": {
@@ -9,8 +9,8 @@
     "registry": "https://registry.npmjs.org/"
   },
   "scripts": {
-    "build": "yarn clean && tsc",
-    "clean": "rm -rf ./dist",
+    "prebuild": "rm -rf ./dist",
+    "build": "tsc",
     "predocs": "typedoc --excludePrivate --excludeProtected --includeVersion ./src/index.ts",
     "docs": "echo connector.sentre.io >> ./docs/CNAME && gh-pages -d docs",
     "pretest": "yarn build",
