@@ -44,8 +44,7 @@ export class SentreWalletAdapter extends BaseMessageSignerWalletAdapter {
     if (this._readyState !== WalletReadyState.Unsupported) {
       const isIframe = window !== window.top
       const key = 'walletName'
-      const mem = localStorage.getItem(key) || ''
-      if (isIframe && JSON.parse(mem) !== SentreWalletName)
+      if (isIframe && localStorage.getItem(key) !== `"${SentreWalletName}"`)
         localStorage.removeItem(key)
       scopePollingDetectionStrategy(() => {
         if (isIframe) {
