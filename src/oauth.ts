@@ -1,6 +1,7 @@
 import { PublicKey } from '@solana/web3.js'
 import { decode, encode } from 'bs58'
 import { hash, sign } from 'tweetnacl'
+import { v4 as uuid } from 'uuid'
 
 const MONTH = 30 * 24 * 60 * 60
 
@@ -49,15 +50,10 @@ export class JST {
   }
 
   /**
-   * Generate a random unique id
-   * @param len id length in bits
-   * @returns Unique id
+   * Generate a random universal unique id (uuid v4)
+   * @returns uuid
    */
-  static rand = (len: number = 32) => {
-    const buf = []
-    while (buf.length < len) buf.push(Math.round(Math.random() * 256))
-    return encode(buf)
-  }
+  static rand = uuid
 
   /**
    * Get the current date
@@ -132,7 +128,7 @@ export class OAuth {
    * @param bearer The bearer. To use, add to request header `Authorization: Bearer bearer`
    * @returns `true` or `false`
    */
-  verify = async (bearer: string) => {
+  verify = (bearer: string) => {
     const [address, encodedSig, code] = bearer.split('/')
     const publicKey = new PublicKey(address)
     const sig = decode(encodedSig)

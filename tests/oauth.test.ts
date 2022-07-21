@@ -16,7 +16,8 @@ describe('OAuth', () => {
   it('sign/verify', async () => {
     const jst = oauth.issue('hub.sentre.io')
     const bearer = await oauth.sign(jst, signer)
-    const ok = await oauth.verify(bearer)
+    console.log(bearer)
+    const ok = oauth.verify(bearer)
     expect(ok).true
   })
 })
