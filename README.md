@@ -81,16 +81,18 @@ This module is heavily inspired by [JWT](https://www.npmjs.com/package/jsonwebto
 ```ts
 import { OAuth } from '@sentre/connector'
 
-const oauth = new OAuth()
-const jst = oauth.issue({ issuer: 'hub.sentre.io' }) // Default is one month of expiration
+const jst = OAuth.issue({ issuer: 'hub.sentre.io' }) // Default at one month of expiration
 
 // On client side
-// Sign the jst to get bearer
-const bearer = await oauth.sign(jst, signer)
+// To sign the jst to get bearer
+const bearer = await OAuth.sign(jst, signer)
 
 // On server side
-// Verify the bearer
-const ok = await oauth.verify(bearer)
+// To verify the bearer
+const ok = OAuth.verify(bearer)
+
+// To read bearer details
+const { publicKey, signature, jst } = OAuth.parse(bearer)
 ```
 
 ### Examples

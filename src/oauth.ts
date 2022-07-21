@@ -102,10 +102,23 @@ export class OAuth {
    * Conveniently issue an "unsigned" JST
    * @param issuer Issuer name. We recommend to use your app domain
    * @param ttl Time to Live (in seconds)
-   * @returns JST
+   * @returns A Json Solana Token
    */
-  issue = (issuer: string, ttl: number = MONTH) => {
+  static issue = (issuer: string, ttl: number = MONTH) => {
     return new JST({ issuer, ttl })
+  }
+
+  /**
+   * Verify the bearer, which is returned by `sign`
+   * @param bearer The bearer. To use, add to request header `Authorization: Bearer bearer`
+   * @returns A object of { publicKey, signature, jst }
+   */
+  static parse = (bearer: string) => {
+    const [address, encodedSig, code] = bearer.split('/')
+    const publicKey = new PublicKey(address)
+    const signature = decode(encodedSig)
+    const jst = JST.fromBuffer(Buffer.from(decode(code)))
+    return { publicKey, signature, jst }
   }
 
   /**
@@ -114,7 +127,7 @@ export class OAuth {
    * @param signer The signer
    * @returns Bearer
    */
-  sign = async (jst: JST, signer: Signer) => {
+  static sign = async (jst: JST, signer: Signer) => {
     const publicKey = await signer.getPublicKey()
     const address = publicKey.toBase58()
     const sig = await signer.signMessage(Buffer.from(hash(jst.toBuffer())))
@@ -128,15 +141,12 @@ export class OAuth {
    * @param bearer The bearer. To use, add to request header `Authorization: Bearer bearer`
    * @returns `true` or `false`
    */
-  verify = (bearer: string) => {
-    const [address, encodedSig, code] = bearer.split('/')
-    const publicKey = new PublicKey(address)
-    const sig = decode(encodedSig)
-    const jst = JST.fromBuffer(Buffer.from(decode(code)))
-    const buf = sign.open(Buffer.from(sig), publicKey.toBuffer())
+  static verify = (bearer: string) => {
+    const { publicKey, signature, jst } = OAuth.parse(bearer)
+    const buf = sign.open(Buffer.from(signature), publicKey.toBuffer())
     if (!buf) return false
-    const msg = encode(Buffer.from(buf))
+    const signedMsg = encode(Buffer.from(buf))
     const expectedMsg = encode(hash(jst.toBuffer()))
-    return msg === expectedMsg
+    return signedMsg === expectedMsg
   }
 }
