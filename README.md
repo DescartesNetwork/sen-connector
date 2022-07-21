@@ -90,6 +90,12 @@ const bearer = await OAuth.sign(jst, signer)
 // On server side
 // To verify the bearer
 const ok = OAuth.verify(bearer)
+// If you want to catch error messages
+try {
+  OAuth.verify(bearer, true)
+} catch (er: any) {
+  console.log(`Verify failed because: ${er.message}`)
+}
 
 // To read bearer details
 const { publicKey, signature, jst } = OAuth.parse(bearer)

@@ -139,14 +139,24 @@ export class OAuth {
   /**
    * Verify the bearer, which is returned by `sign`
    * @param bearer The bearer. To use, add to request header `Authorization: Bearer bearer`
+   * @param strict If true, the validator will throw exception instead of boolean. Default: false
    * @returns `true` or `false`
    */
-  static verify = (bearer: string) => {
-    const { publicKey, signature, jst } = OAuth.parse(bearer)
-    const buf = sign.open(Buffer.from(signature), publicKey.toBuffer())
-    if (!buf) return false
-    const signedMsg = encode(Buffer.from(buf))
-    const expectedMsg = encode(hash(jst.toBuffer()))
-    return signedMsg === expectedMsg
+  static verify = (bearer: string, strict: boolean = false) => {
+    try {
+      const { publicKey, signature, jst } = OAuth.parse(bearer)
+      if (!publicKey) throw new Error('Broken public key')
+      const buf = sign.open(Buffer.from(signature), publicKey.toBuffer())
+      if (!buf) throw new Error('Broken signature')
+      const signedMsg = encode(Buffer.from(buf))
+      const expectedMsg = encode(hash(jst.toBuffer()))
+      if (jst.isExpired()) throw new Error('Expired token')
+      if (signedMsg !== expectedMsg) throw new Error('Invalid signature')
+      return true
+    } catch (er: any) {
+      console.log(er.message)
+      if (!strict) return false
+      else throw new Error(er.message)
+    }
   }
 }
