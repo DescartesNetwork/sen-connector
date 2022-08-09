@@ -152,12 +152,13 @@ export class OAuth {
     try {
       const { publicKey, signature, jst } = OAuth.parse(bearer)
       if (!publicKey) throw new Error('Broken public key')
-      const buf = sign.open(Buffer.from(signature), publicKey.toBuffer())
-      if (!buf) throw new Error('Broken signature')
-      const signedMsg = encode(Buffer.from(buf))
-      const expectedMsg = encode(OAuth.seed(jst))
+      const ok = sign.detached.verify(
+        OAuth.seed(jst),
+        Buffer.from(signature),
+        publicKey.toBuffer(),
+      )
+      if (!ok) throw new Error('Invalid signature')
       if (jst.isExpired()) throw new Error('Expired token')
-      if (signedMsg !== expectedMsg) throw new Error('Invalid signature')
       return true
     } catch (er: any) {
       if (!strict) return false

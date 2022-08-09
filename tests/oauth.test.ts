@@ -9,7 +9,7 @@ describe('OAuth', () => {
   const signer: Signer = {
     getPublicKey: async () => keyPair.publicKey,
     signMessage: async (msg: Buffer) =>
-      Buffer.from(sign(msg, keyPair.secretKey)),
+      Buffer.from(sign.detached(msg, keyPair.secretKey)),
   }
 
   it('sign/verify', async () => {
