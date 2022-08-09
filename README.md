@@ -50,7 +50,7 @@ const wallets = [
 ```ts
 import { WalletConnector } from '@sentre/connector'
 
-const wallet = new WalletConnector('my-app-id')
+const wallet = new WalletConnector('my_app_id')
 const isConnected = await wallet.isConnected()
 if (isConnected) {
   // Get the address

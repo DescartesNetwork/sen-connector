@@ -98,6 +98,12 @@ export class JST {
 }
 
 export class OAuth {
+  static seed = (jst: JST) => {
+    const hex = Buffer.from(hash(jst.toBuffer())).toString('hex')
+    const content = `Issuing JSON Solana Token to ${jst.issuer}: ${hex}`
+    return Buffer.from(new TextEncoder().encode(content))
+  }
+
   /**
    * Conveniently issue an "unsigned" JST
    * @param issuer Issuer name. We recommend to use your app domain
@@ -130,7 +136,7 @@ export class OAuth {
   static sign = async (jst: JST, signer: Signer) => {
     const publicKey = await signer.getPublicKey()
     const address = publicKey.toBase58()
-    const sig = await signer.signMessage(Buffer.from(hash(jst.toBuffer())))
+    const sig = await signer.signMessage(OAuth.seed(jst))
     const encodedSig = encode(sig)
     const code = encode(jst.toBuffer())
     return `${address}/${encodedSig}/${code}`
@@ -149,12 +155,11 @@ export class OAuth {
       const buf = sign.open(Buffer.from(signature), publicKey.toBuffer())
       if (!buf) throw new Error('Broken signature')
       const signedMsg = encode(Buffer.from(buf))
-      const expectedMsg = encode(hash(jst.toBuffer()))
+      const expectedMsg = encode(OAuth.seed(jst))
       if (jst.isExpired()) throw new Error('Expired token')
       if (signedMsg !== expectedMsg) throw new Error('Invalid signature')
       return true
     } catch (er: any) {
-      console.log(er.message)
       if (!strict) return false
       else throw new Error(er.message)
     }
