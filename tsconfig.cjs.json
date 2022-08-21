@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "target": "es2016",
+    "module": "commonjs",
+    "outDir": "lib/cjs",
+    "composite": true
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "target": "es2020",
+    "module": "es2020",
+    "outDir": "lib/esm",
+    "declarationDir": "lib/types",
+    "sourceMap": true,
+    "composite": true
+  }
+}
