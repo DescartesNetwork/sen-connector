@@ -1,7 +1,7 @@
+import type { WalletName } from '@solana/wallet-adapter-base'
 import {
   BaseMessageSignerWalletAdapter,
   scopePollingDetectionStrategy,
-  WalletName,
   WalletAccountError,
   WalletNotConnectedError,
   WalletNotReadyError,
@@ -10,7 +10,8 @@ import {
   WalletSignMessageError,
   WalletSignTransactionError,
 } from '@solana/wallet-adapter-base'
-import { PublicKey, Transaction } from '@solana/web3.js'
+import type { Transaction } from '@solana/web3.js'
+import { PublicKey } from '@solana/web3.js'
 import { WalletConnector } from './walletConnector'
 
 export interface SentreWalletAdapterConfig {
