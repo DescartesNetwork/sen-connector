@@ -1,10 +1,7 @@
 import { PublicKey } from '@solana/web3.js'
-import bs58 from 'bs58'
-import tweetnacl from 'tweetnacl'
+import { decode, encode } from 'bs58'
+import { hash, sign } from 'tweetnacl'
 import { v4 as uuid } from 'uuid'
-
-const { decode, encode } = bs58
-const { hash, sign } = tweetnacl
 
 const MONTH = 30 * 24 * 60 * 60
 

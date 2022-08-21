@@ -12,7 +12,7 @@ import {
 } from '@solana/wallet-adapter-base'
 import type { Transaction } from '@solana/web3.js'
 import { PublicKey } from '@solana/web3.js'
-import { WalletConnector } from './walletConnector.js'
+import { WalletConnector } from './walletConnector'
 
 export interface SentreWalletAdapterConfig {
   appId: string
