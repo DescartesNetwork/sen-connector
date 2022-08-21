@@ -1,7 +1,7 @@
 {
   "name": "@sentre/connector",
   "description": "🤝 Senhub Connector to power your DApps with Senhub Platform",
-  "version": "0.0.59-next.7",
+  "version": "0.0.59-next.8",
   "main": "dist/index.js",
   "module": "dist/index.js",
   "type": "module",
