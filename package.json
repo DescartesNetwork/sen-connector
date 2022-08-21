@@ -1,10 +1,9 @@
 {
   "name": "@sentre/connector",
   "description": "🤝 Senhub Connector to power your DApps with Senhub Platform",
-  "version": "0.0.59-next.3",
+  "version": "0.0.59-next.4",
   "main": "dist/index.js",
   "homepage": "connector.sentre.io",
-  "type": "module",
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
