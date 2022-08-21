@@ -1,7 +1,7 @@
 {
   "name": "@sentre/connector",
   "description": "🤝 Senhub Connector to power your DApps with Senhub Platform",
-  "version": "0.0.59-next.10",
+  "version": "0.0.59-next.11",
   "main": "dist/index.js",
   "homepage": "connector.sentre.io",
   "publishConfig": {
@@ -33,10 +33,11 @@
     "node": ">=16 <=18"
   },
   "resolutions": {
+    "@solana/wallet-adapter-base": "0.9.7",
     "@solana/web3.js": "1.44.3"
   },
   "dependencies": {
-    "@solana/wallet-adapter-base": "^0.9.14",
+    "@solana/wallet-adapter-base": "0.9.7",
     "@solana/web3.js": "^1.44.3",
     "bs58": "^5.0.0",
     "tweetnacl": "^1.0.3",
