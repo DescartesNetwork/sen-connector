@@ -1,8 +1,10 @@
 {
   "name": "@sentre/connector",
   "description": "🤝 Senhub Connector to power your DApps with Senhub Platform",
-  "version": "0.0.59-next.5",
+  "version": "0.0.59-next.6",
   "main": "dist/index.js",
+  "module": "dist/index.js",
+  "type": "module",
   "homepage": "connector.sentre.io",
   "publishConfig": {
     "access": "public",
@@ -14,7 +16,7 @@
     "predocs": "typedoc --excludePrivate --excludeProtected --includeVersion ./src/index.ts",
     "docs": "echo connector.sentre.io >> ./docs/CNAME && gh-pages -d docs",
     "pretest": "yarn build",
-    "test": "mocha --require ts-node/register -t 120000 tests/**/*.test.ts"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",

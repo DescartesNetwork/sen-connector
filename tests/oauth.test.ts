@@ -1,8 +1,10 @@
 import { Keypair } from '@solana/web3.js'
-import { sign } from 'tweetnacl'
+import tweetnacl from 'tweetnacl'
 import { expect } from 'chai'
 
-import { OAuth, Signer } from '../src'
+import { OAuth, Signer } from '../dist'
+
+const { sign } = tweetnacl
 
 describe('OAuth', () => {
   const keyPair = new Keypair()
