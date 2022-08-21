@@ -1,8 +1,8 @@
 import { Transaction } from '@solana/web3.js'
 
-import { Messenger } from './bridge'
-import { EVENTS, ONE_SEC } from './constants'
-import { SignedMessage } from './gateway'
+import { Messenger } from './bridge.js'
+import { EVENTS, ONE_SEC } from './constants.js'
+import { SignedMessage } from './gateway.js'
 
 export const UID = () => Math.round(Math.random() * 10 ** 9)
 

@@ -1,7 +1,7 @@
 import { Transaction } from '@solana/web3.js'
 
-import { Messenger } from './bridge'
-import { EVENTS } from './constants'
+import { Messenger } from './bridge.js'
+import { EVENTS } from './constants.js'
 
 export type SignedMessage = {
   address: string // base58
