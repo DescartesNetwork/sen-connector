@@ -19,6 +19,9 @@
     "entryPoints": ["./src/index.ts"],
     "out": "docs"
   },
+  "tsc-alias": {
+    "resolveFullPaths": true
+  },
   "ts-node": {
     "esm": true
   }
