@@ -1,7 +1,7 @@
 {
   "name": "@sentre/connector",
   "description": "🤝 Senhub Connector to power your DApps with Senhub Platform",
-  "version": "0.0.60",
+  "version": "0.0.61",
   "main": "dist/index.js",
   "homepage": "connector.sentre.io",
   "publishConfig": {
@@ -10,7 +10,7 @@
   },
   "scripts": {
     "prebuild": "rm -rf ./dist",
-    "build": "tsc && tsc-alias",
+    "build": "tsc",
     "predocs": "typedoc --excludePrivate --excludeProtected --includeVersion ./src/index.ts",
     "docs": "echo connector.sentre.io >> ./docs/CNAME && gh-pages -d docs",
     "pretest": "yarn build",
@@ -51,7 +51,6 @@
     "chai": "^4.3.6",
     "gh-pages": "^4.0.0",
     "mocha": "^10.0.0",
-    "tsc-alias": "^1.7.0",
     "ts-mocha": "^10.0.0",
     "ts-node": "^10.8.0",
     "typedoc": "^0.23.7",
