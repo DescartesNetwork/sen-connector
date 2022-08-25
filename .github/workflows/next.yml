@@ -2,7 +2,7 @@ name: Automatic Deployment
 
 on:
   push:
-    branches: [master]
+    branches: [next]
 
 jobs:
   build:
@@ -17,7 +17,7 @@ jobs:
           node-version: '16.x'
           registry-url: 'https://registry.npmjs.org'
       - run: yarn install && yarn build
-      - run: npm publish --access=public --tag=latest
+      - run: npm publish --access=public --tag=next
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Deploy docs to gh-pages branch
