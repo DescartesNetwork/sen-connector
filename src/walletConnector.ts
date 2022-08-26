@@ -17,7 +17,7 @@ export class WalletConnector {
 
   private interact = async <T>({
     event,
-    data = {},
+    data = undefined,
     timeout = ONE_SEC * 3,
   }: {
     event: EVENTS
