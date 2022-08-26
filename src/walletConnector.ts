@@ -17,25 +17,25 @@ export class WalletConnector {
 
   private interact = async <T>({
     event,
-    data = {},
+    data = undefined,
     timeout = ONE_SEC * 3,
   }: {
     event: EVENTS
     data?: any
     timeout?: number
   }) => {
-    return new Promise((resolve, reject) => {
+    return new Promise<T>((resolve, reject) => {
       try {
         if (!window.parent) throw new Error('Cannot access to parent window')
         const timeoutId = setTimeout(() => reject('Request timeout'), timeout)
         const id = this.id
         const uid = UID()
         const kill = this.messenger.listen(
-          ({ event: catchedEvent, uid: catchedUID, data }) => {
+          ({ event: catchedEvent, uid: catchedUID, data: catchedData }) => {
             if (event === catchedEvent && uid === catchedUID) {
               clearTimeout(timeoutId)
               kill()
-              return resolve(data)
+              return resolve(catchedData)
             }
           },
         )
@@ -43,7 +43,7 @@ export class WalletConnector {
       } catch (er: any) {
         return reject(er.message)
       }
-    }) as Promise<T>
+    })
   }
 
   isConnected = async (): Promise<boolean> => {
