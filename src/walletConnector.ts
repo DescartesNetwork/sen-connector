@@ -70,7 +70,8 @@ export class WalletConnector {
       timeout: ONE_SEC * 60,
     })
     const tx = Transaction.from(serializedTx)
-    return tx
+    Object.assign(transaction, tx)
+    return transaction
   }
 
   signAllTransactions = async (
@@ -89,7 +90,10 @@ export class WalletConnector {
     const txs = serializedTxs.map((serializedTx) =>
       Transaction.from(serializedTx),
     )
-    return txs
+    txs.forEach((tx, i) => {
+      transactions[i] = Object.assign(transactions[i], tx)
+    })
+    return transactions
   }
 
   signMessage = async (message: string): Promise<SignedMessage> => {
