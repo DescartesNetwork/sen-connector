@@ -59,7 +59,10 @@ export class Gateway {
   onSignTransaction = async (id: string, uid: number, buf: Buffer) => {
     const tx = Transaction.from(buf)
     const signedTx = await this.wallet.signTransaction(tx)
-    const serializedTx = signedTx.serialize()
+    const serializedTx = signedTx.serialize({
+      requireAllSignatures: false,
+      verifySignatures: false,
+    })
     return this.emit(id, {
       uid,
       event: EVENTS.SIGN_TRANSACTION,
@@ -70,7 +73,12 @@ export class Gateway {
   onSignAllTransactions = async (id: string, uid: number, bufs: Buffer[]) => {
     const txs = bufs.map((buf) => Transaction.from(buf))
     const signedTxs = await this.wallet.signAllTransactions(txs)
-    const serializedTxs = signedTxs.map((signedTx) => signedTx.serialize())
+    const serializedTxs = signedTxs.map((signedTx) =>
+      signedTx.serialize({
+        requireAllSignatures: false,
+        verifySignatures: false,
+      }),
+    )
     return this.emit(id, {
       uid,
       event: EVENTS.SIGN_ALL_TRANSACTIONS,
